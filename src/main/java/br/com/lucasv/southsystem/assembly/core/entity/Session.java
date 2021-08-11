@@ -1,6 +1,8 @@
 package br.com.lucasv.southsystem.assembly.core.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>A Session for a subject.
@@ -24,6 +26,7 @@ public class Session {
   private Subject subject;
   private LocalDateTime startDateTime;
   private LocalDateTime endDateTime;
+  private List<Vote> votes;
 
   /**
    * <p>Create Session for a specific subject.
@@ -58,6 +61,7 @@ public class Session {
     this.subject = subject;
     this.startDateTime = startDateTime;
     this.endDateTime = endDateTime;
+    this.votes = new ArrayList<>();
   }
   
   /**
@@ -71,6 +75,7 @@ public class Session {
     this.subject = subject;
     this.startDateTime = LocalDateTime.now();
     this.endDateTime = startDateTime.plusMinutes(duration);
+    this.votes = new ArrayList<>();
   }
 
   /**
@@ -146,6 +151,33 @@ public class Session {
    */
   public void setEndDateTime(LocalDateTime endDateTime) {
     this.endDateTime = endDateTime;
+  }
+
+  /**
+   * Register a vote in the Session
+   * 
+   * @param vote The vote to register in the Session
+   */
+  public void registerVote(Vote vote) {
+    votes.add(vote);
+  }
+
+  /**
+   * <p>Get the total votes in session
+   * 
+   * @return The total votes registered in the session
+   */
+  public int getTotalVotes() {
+    return votes.size();
+  }
+
+  /**
+   * Get all votes registered in the session
+   * 
+   * @return A list with all votes registered in the session
+   */
+  public List<Vote> getVotes() {
+    return this.votes;
   }
 
   /**
