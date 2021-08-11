@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.lucasv.southsystem.assembly.infra.http.dto.MemberVotingStatusDto;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -41,6 +42,7 @@ public class MemberController {
    */
   @GetMapping("/{cpf}/member-status")
   @Operation(summary="Get the voting status of a member")
+  @Retry(name="assembly")
   public ResponseEntity<MemberVotingStatusDto> getMemberVotingStatus(@PathVariable String cpf) {
     MemberVotingStatusDto memberVotingStatusDto = memberVotingStatusProxy.getMemberStatusVote(cpf);
         
