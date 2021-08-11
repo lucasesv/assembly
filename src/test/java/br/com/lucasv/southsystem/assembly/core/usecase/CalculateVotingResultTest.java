@@ -20,7 +20,6 @@ import br.com.lucasv.southsystem.assembly.core.entity.Session;
 import br.com.lucasv.southsystem.assembly.core.entity.Subject;
 import br.com.lucasv.southsystem.assembly.core.entity.Vote;
 import br.com.lucasv.southsystem.assembly.core.entity.VotingResult;
-import br.com.lucasv.southsystem.assembly.core.usecase.CalculateVotingResult;
 
 /**
  * <p>JUnit tests for the use case {@link CalculateVotingResult}.

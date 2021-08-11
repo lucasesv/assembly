@@ -25,8 +25,6 @@ import br.com.lucasv.southsystem.assembly.core.entity.Subject;
 import br.com.lucasv.southsystem.assembly.core.entity.Vote;
 import br.com.lucasv.southsystem.assembly.core.exception.CannotVoteInClosedSessionException;
 import br.com.lucasv.southsystem.assembly.core.exception.MemberAlreadyVotedException;
-import br.com.lucasv.southsystem.assembly.core.usecase.ComputeVote;
-import br.com.lucasv.southsystem.assembly.core.usecase.StartVotingSession;
 
 /**
  * <p>JUnit tests for the use case {@link ComputeVote}.
