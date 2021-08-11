@@ -1,5 +1,6 @@
 package br.com.lucasv.southsystem.assembly.infra.http;
 
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.models.info.Info;
  *
  */
 @Configuration
+@EnableFeignClients
 public class RestConfiguration {
 
   /**
