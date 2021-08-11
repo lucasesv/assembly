@@ -3,8 +3,10 @@ package br.com.lucasv.southsystem.assembly.infra.http.controller;
 import java.net.URI;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,8 +16,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.lucasv.southsystem.assembly.core.entity.Session;
 import br.com.lucasv.southsystem.assembly.core.entity.Subject;
+import br.com.lucasv.southsystem.assembly.core.entity.VotingResult;
+import br.com.lucasv.southsystem.assembly.core.usecase.CalculateVotingResult;
 import br.com.lucasv.southsystem.assembly.core.usecase.StartVotingSession;
 import br.com.lucasv.southsystem.assembly.infra.http.dto.SessionDto;
+import br.com.lucasv.southsystem.assembly.infra.http.dto.VotingResultDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -31,10 +36,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class SessionController {
 
   private final StartVotingSession startVotingSession;
+  private final CalculateVotingResult calculateVotingResult;
 
-  public SessionController(StartVotingSession startVotingSession) {
+  public SessionController(
+      StartVotingSession startVotingSession,
+      CalculateVotingResult calculateVotingResult) {
 
     this.startVotingSession = startVotingSession;
+    this.calculateVotingResult = calculateVotingResult;
   }
 
   /**
@@ -65,6 +74,25 @@ public class SessionController {
         .toUri();
 
     return ResponseEntity.created(uri).body(createdSessionDto);
+  }
+
+  /**
+   * Retrieve the voting result of a session.
+   * 
+   * @param sessionId The id of the {@link Session}.
+   * @return A {@link VotingResultDto} with information about the voting result of
+   *         the session.
+   */
+  @GetMapping("/{sessionId}/result")
+  @Operation(summary = "Get the result of a voting session")
+  public ResponseEntity<VotingResultDto> getVotingResult(@Positive @PathVariable int sessionId) {
+    VotingResult votingResult = calculateVotingResult.execute(sessionId);
+
+    VotingResultDto votingResultDto = new VotingResultDto(
+        votingResult.getYesVotesAmount(),
+        votingResult.getNoVotesAmount());
+
+    return ResponseEntity.ok(votingResultDto);
   }
 
 }
