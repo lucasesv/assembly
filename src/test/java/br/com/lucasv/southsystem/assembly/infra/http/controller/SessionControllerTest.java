@@ -1,11 +1,15 @@
 package br.com.lucasv.southsystem.assembly.infra.http.controller;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,8 +23,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 
+import br.com.lucasv.southsystem.assembly.core.entity.Member;
 import br.com.lucasv.southsystem.assembly.core.entity.Session;
 import br.com.lucasv.southsystem.assembly.core.entity.Subject;
+import br.com.lucasv.southsystem.assembly.core.entity.Vote;
+import br.com.lucasv.southsystem.assembly.core.entity.VotingResult;
 import br.com.lucasv.southsystem.assembly.core.usecase.CalculateVotingResult;
 import br.com.lucasv.southsystem.assembly.core.usecase.StartVotingSession;
 
@@ -102,6 +109,80 @@ public class SessionControllerTest {
     // Act & Assert
     mvc.perform(request)
         .andExpect(status().isBadRequest());
+  }
+  
+  @Test
+  @DisplayName("Should calculate approved voting result")
+  void shouldCalculateApprovedVotingResult() throws Exception {
+    // Arrange
+    Session session = new Session(subject);
+    List<Member> members = Arrays.asList(
+        new Member(1),
+        new Member(2),
+        new Member(3));
+    List<Vote> yesVotes = Arrays.asList(
+        new Vote(session, members.get(0), true),
+        new Vote(session, members.get(1), false));
+    List<Vote> noVotes = Arrays.asList(
+        new Vote(session, members.get(2), false));
+    VotingResult votingResult = new VotingResult(session, yesVotes, noVotes);
+    when(calculateVotingResult.execute(1)).thenReturn(votingResult);
+    RequestBuilder request = get("/subjects/{subjectId}/sessions/{sessionId}/result", 1, 1)
+        .accept(MediaType.APPLICATION_JSON);
+    
+    // Act & Assert
+    mvc.perform(request)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.result").value("Approved"));
+  }
+  
+  @Test
+  @DisplayName("Should calculate rejected voting result")
+  void shouldCalculateRejectedVotingResult() throws Exception {
+    // Arrange
+    Session session = new Session(subject);
+    List<Member> members = Arrays.asList(
+        new Member(1),
+        new Member(2),
+        new Member(3));
+    List<Vote> yesVotes = Arrays.asList(
+        new Vote(session, members.get(0), true));
+    List<Vote> noVotes = Arrays.asList(
+        new Vote(session, members.get(1), false),
+        new Vote(session, members.get(2), false));
+    VotingResult votingResult = new VotingResult(session, yesVotes, noVotes);
+    when(calculateVotingResult.execute(1)).thenReturn(votingResult);
+    RequestBuilder request = get("/subjects/{subjectId}/sessions/{sessionId}/result", 1, 1)
+        .accept(MediaType.APPLICATION_JSON);
+    
+    // Act & Assert
+    mvc.perform(request)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.result").value("Rejected"));
+  }
+  
+  @Test
+  @DisplayName("Should calculate rejected voting result")
+  void shouldCalculateDrawVotingResult() throws Exception {
+    // Arrange
+    Subject subject = new Subject("Subject 1");
+    Session session = new Session(subject);
+    List<Member> members = Arrays.asList(
+        new Member(1),
+        new Member(2));
+    List<Vote> yesVotes = Arrays.asList(
+        new Vote(session, members.get(0), true));
+    List<Vote> noVotes = Arrays.asList(
+        new Vote(session, members.get(1), false));
+    VotingResult votingResult = new VotingResult(session, yesVotes, noVotes);
+    when(calculateVotingResult.execute(1)).thenReturn(votingResult);
+    RequestBuilder request = get("/subjects/{subjectId}/sessions/{sessionId}/result", 1, 1)
+        .accept(MediaType.APPLICATION_JSON);
+    
+    // Act & Assert
+    mvc.perform(request)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.result").value("Draw"));
   }
   
 }
