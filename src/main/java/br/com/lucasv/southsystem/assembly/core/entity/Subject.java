@@ -10,6 +10,7 @@ public class Subject {
 
   private int id;
   private String description;
+  private Session session;
 
   /**
    * <p>Create a Subject with a specific id and description
@@ -71,6 +72,19 @@ public class Subject {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  /**
+   * Get the current session.
+   * 
+   * @return The current session.
+   */
+  public Session getSession() {
+    return session;
+  }
+
+  public void setSession(Session session) {
+    this.session = session;
   }
 
   /**
