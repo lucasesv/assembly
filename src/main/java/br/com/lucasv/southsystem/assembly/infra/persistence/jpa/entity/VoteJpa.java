@@ -25,7 +25,7 @@ import javax.persistence.OneToOne;
 public class VoteJpa {
   
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @GeneratedValue(strategy=GenerationType.AUTO)
   private Integer id;
   
   @OneToOne
