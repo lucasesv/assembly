@@ -17,9 +17,6 @@ import javax.validation.constraints.Positive;
 public class VoteDto {
 
   @Positive
-  private int sessionId;
-  
-  @Positive
   private int memberId;
   
   @NotNull
@@ -32,18 +29,9 @@ public class VoteDto {
    * @param sessionId The id of the session where the voted was registered.
    * @param choice The vote choice. {@code true} means yes.
    */
-  public VoteDto(int memberId, int sessionId, boolean choice) {
-    this.sessionId = sessionId;
+  public VoteDto(int memberId, boolean choice) {
     this.memberId = memberId;
     this.choice = choice;
-  }
-
-  public int getSessionId() {
-    return sessionId;
-  }
-
-  public void setSessionId(int sessionId) {
-    this.sessionId = sessionId;
   }
 
   public int getMemberId() {

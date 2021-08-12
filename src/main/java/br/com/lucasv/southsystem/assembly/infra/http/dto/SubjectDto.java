@@ -2,6 +2,10 @@ package br.com.lucasv.southsystem.assembly.infra.http.dto;
 
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * <p>The DTO with information about a Subject.
  * 
@@ -15,6 +19,8 @@ import javax.validation.constraints.NotBlank;
  */
 public class SubjectDto {
 
+  @JsonProperty(access=JsonProperty.Access.READ_ONLY)
+  @Schema(accessMode=Schema.AccessMode.READ_ONLY)
   private int id;
 
   @NotBlank

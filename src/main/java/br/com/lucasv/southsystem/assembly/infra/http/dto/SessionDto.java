@@ -6,7 +6,10 @@ import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * <p>The DTO with information about a Session.
@@ -22,6 +25,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class SessionDto {
   
+  @JsonProperty(access=JsonProperty.Access.READ_ONLY)
+  @Schema(accessMode=Schema.AccessMode.READ_ONLY)
   private int id;
   
   @Positive
