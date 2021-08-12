@@ -31,7 +31,7 @@ import br.com.lucasv.southsystem.assembly.core.entity.Vote;
 @Entity(name="Session")
 public class SessionJpa {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @GeneratedValue(strategy=GenerationType.AUTO)
   private int id;
   
   @OneToOne
