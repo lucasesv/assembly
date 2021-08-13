@@ -98,7 +98,7 @@ In this application, messaging was configure exclusively to meet the requirement
 Since the objective of **Bonus Task2** was to test messaging in the application, it was created a REST endpoint wich will publish a message to RabbitMQ whenever it receives a GET request in the following endpoint:
 
 ```
-(GET) /subjects/{subjectId}/sessions/{sessionId}/result-amqp
+(GET) /amqp/sessions/{sessionId}/result
 ```
 
 ## Bonus Tasks

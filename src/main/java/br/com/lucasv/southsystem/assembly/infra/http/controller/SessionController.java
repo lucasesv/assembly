@@ -5,7 +5,6 @@ import java.net.URI;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,13 +47,13 @@ public class SessionController {
   
   private final StartVotingSession startVotingSession;
   private final CalculateVotingResult calculateVotingResult;
-  private final RabbitTemplate rabbitTemplate;
 
-  public SessionController(StartVotingSession startVotingSession,
-      CalculateVotingResult calculateVotingResult, RabbitTemplate rabbitTemplate) {
+  public SessionController(
+      StartVotingSession startVotingSession,
+      CalculateVotingResult calculateVotingResult) {
+    
     this.startVotingSession = startVotingSession;
     this.calculateVotingResult = calculateVotingResult;
-    this.rabbitTemplate = rabbitTemplate;
   }
 
   /**
@@ -106,26 +105,4 @@ public class SessionController {
     return ResponseEntity.ok(votingResultDto);
   }
 
-  /**
-   * Retrieve the voting result of a session and publish a message to AMQP
-   * RabbitMQ.
-   * 
-   * @param sessionId The id of the {@link Session}.
-   * @return A {@link VotingResultDto} with information about the voting result of
-   *         the session.
-   */
-  @GetMapping("/{sessionId}/result-amqp")
-  @Operation(summary = "Get the result of a voting session")
-  public ResponseEntity<VotingResultDto> getVotingResultToAmqp(@Positive @PathVariable int sessionId) {
-    VotingResult votingResult = calculateVotingResult.execute(sessionId);
-
-    VotingResultDto votingResultDto = new VotingResultDto(
-        votingResult.getYesVotesAmount(),
-        votingResult.getNoVotesAmount());
-    
-    rabbitTemplate.convertAndSend(exchangeName, routingKeyVotingResult, votingResultDto);
-
-    return ResponseEntity.ok(votingResultDto);
-  }
-  
 }
